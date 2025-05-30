@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MessagesModule } from './messages/messages.module';
+import { ThreadModule } from './threads/thread.module';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { MessagesModule } from './messages/messages.module';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get('DB_HOST', 'localhost'),
-        port: configService.get('DB_PORT', 5432),
+        port: configService.get<number>('DB_PORT', 5432),
         username: configService.get('DB_USERNAME', 'postgres'),
         password: configService.get('DB_PASSWORD', 'postgres'),
         database: configService.get('DB_DATABASE', 'gossip'),
@@ -23,6 +24,7 @@ import { MessagesModule } from './messages/messages.module';
       inject: [ConfigService],
     }),
     MessagesModule,
+    ThreadModule,
     // XPModule, // XP calculation algorithms
     // AchievementModule, // Achievement tracking system
     // LeaderboardModule, // Leaderboard ranking algorithms
