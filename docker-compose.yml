@@ -1,15 +1,16 @@
-version: '3.8'
+version: '3'
 services:
-  postgres:
-    image: postgres:15
-    restart: always
-    environment:
-      POSTGRES_USER: nestuser
-      POSTGRES_PASSWORD: nestpassword
-      POSTGRES_DB: nestdb
+  app:
+    build: .
     ports:
-      - '5432:5432'
+      - '3000:3000'
+    depends_on:
+      - influxdb
+  influxdb:
+    image: influxdb:2.0
+    ports:
+      - '8086:8086'
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - influxdb-data:/var/lib/influxdb2
 volumes:
-  pgdata: 
+  influxdb-data:
