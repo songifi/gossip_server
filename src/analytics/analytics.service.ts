@@ -33,7 +33,6 @@ export class AnalyticsService {
     } else if (typeof value === 'boolean') {
       point.booleanField(key, value);
     } else {
-      // Fallback: convert unsupported types to string
       point.stringField(key, String(value));
     }
   }
@@ -86,5 +85,32 @@ export class AnalyticsService {
     `;
     const result = await queryApi.collectRows<{ _value: number }>(fluxQuery);
     return result.length > 0 ? result[0]._value : 0;
+  }
+
+  async getGroupEngagement(groupId: string, start: string = '-30d'): Promise<number> {
+    const queryApi = this.influxDB.getQueryApi(this.org);
+    const fluxQuery = `
+      from(bucket: "${this.bucket}")
+        |> range(start: ${start})
+        |> filter(fn: (r) => r._measurement == "user_events")
+        |> filter(fn: (r) => r.groupId == "${groupId}")
+        |> count()
+        |> yield(name: "group_engagement")
+    `;
+    const result = await queryApi.collectRows<{ _value: number }>(fluxQuery);
+    return result.length > 0 ? result[0]._value : 0;
+  }
+
+  async getTrendAnalysis(metric: string, start: string = '-30d'): Promise<number[]> {
+    const queryApi = this.influxDB.getQueryApi(this.org);
+    const fluxQuery = `
+      from(bucket: "${this.bucket}")
+        |> range(start: ${start})
+        |> filter(fn: (r) => r._measurement == "${metric}")
+        |> aggregateWindow(every: 1d, fn: count)
+        |> yield(name: "trend")
+    `;
+    const result = await queryApi.collectRows<{ _value: number }>(fluxQuery);
+    return result.map(row => row._value);
   }
 }
