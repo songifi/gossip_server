@@ -2,17 +2,20 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AnalyticsModule } from './analytics/analytics.module';
 import { ThreadModule } from './threads/thread.module';
+
 import { TransactionHistoryModule } from './transaction-history/transaction-history.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    AnalyticsModule,
     ThreadModule,
     TransactionHistoryModule,
-    // XPModule, // XP calculation algorithms
-    // AchievementModule, // Achievement tracking system
-    // LeaderboardModule, // Leaderboard ranking algorithms
-    // RewardModule, // Reward distribution mechanisms
+    // XPModule,
+    // AchievementModule,
+    // LeaderboardModule,
+    // RewardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
