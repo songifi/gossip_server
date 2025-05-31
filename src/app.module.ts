@@ -5,11 +5,13 @@ import { AppService } from './app.service';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { ThreadModule } from './threads/thread.module';
 
+import { TransactionHistoryModule } from './transaction-history/transaction-history.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AnalyticsModule,
     ThreadModule,
+    TransactionHistoryModule,
     // XPModule,
     // AchievementModule,
     // LeaderboardModule,
