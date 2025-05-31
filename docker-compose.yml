@@ -6,11 +6,36 @@ services:
       - '3000:3000'
     depends_on:
       - influxdb
+      - postgres
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=gossip_server
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_TOKEN=your-token-here
+      - INFLUXDB_ORG=gossip_server
+      - INFLUXDB_BUCKET=metrics
+
   influxdb:
     image: influxdb:2.0
     ports:
       - '8086:8086'
     volumes:
       - influxdb-data:/var/lib/influxdb2
+
+  postgres:
+    image: postgres:15
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=gossip_server
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
 volumes:
   influxdb-data:
+  postgres-data:
