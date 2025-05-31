@@ -4,12 +4,18 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { ThreadModule } from './threads/thread.module';
+import { SyncModule } from './sync/sync.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AnalyticsModule,
     ThreadModule,
+    SyncModule,
+    // XPModule, // XP calculation algorithms
+    // AchievementModule, // Achievement tracking system
+    // LeaderboardModule, // Leaderboard ranking algorithms
+    // RewardModule, // Reward distribution mechanisms
     // XPModule,
     // AchievementModule,
     // LeaderboardModule,

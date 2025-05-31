@@ -1,86 +1,118 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
+} from "typeorm"
 
-@Entity('threads')
+@Entity("threads")
 export class ThreadEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string
 
   @Column({ nullable: true })
-  parentId?: string;
+  parentId?: string
 
   @Column({ nullable: true })
-  rootId?: string;
+  rootId?: string
 
   @Column()
-  authorId: string;
+  authorId: string
 
-  @Column('text')
-  content: string;
+  @Column("text")
+  content: string
 
   @Column({ nullable: true, length: 200 })
-  subject?: string;
+  subject?: string
 
   @Column({ default: 0 })
-  depth: number;
+  depth: number
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: Date
 
   @Column({ default: false })
-  isArchived: boolean;
+  isArchived: boolean
 
   @Column({ default: false })
-  isCollapsed: boolean;
+  isCollapsed: boolean
 
-  @Column('simple-array')
-  participantIds: string[];
+  @Column("simple-array")
+  participantIds: string[]
 
-  @Column('json', { nullable: true })
+  @Column("json", { nullable: true })
   metadata: {
-    messageCount: number;
-    lastActivityAt: Date;
-    tags: string[];
-    priority: 'low' | 'normal' | 'high' | 'urgent';
-    readStatus: Record<string, boolean>;
-  };
+    messageCount: number
+    lastActivityAt: Date
+    tags: string[]
+    priority: "low" | "normal" | "high" | "urgent"
+    readStatus: Record<string, boolean>
+  }
 
-  @ManyToOne(() => ThreadEntity, thread => thread.childThreads)
-  @JoinColumn({ name: 'parentId' })
-  parentThread?: ThreadEntity;
-
-  @OneToMany(() => ThreadEntity, thread => thread.parentThread)
-  childThreads: ThreadEntity[];
-}
-
-@Entity('thread_notifications')
-export class ThreadNotificationEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column()
-  threadId: string;
-
-  @Column()
-  userId: string;
-
-  @Column({ default: true })
-  notifyOnReply: boolean;
-
-  @Column({ default: true })
-  notifyOnMention: boolean;
-
-  @Column({ default: false })
-  notifyOnParticipantJoin: boolean;
+  // Sync-related fields
+  @Column("json", { default: {} })
+  vectorClock: Record<string, number>
 
   @Column({ nullable: true })
-  mutedUntil?: Date;
+  lastSyncedAt?: Date
+
+  @Column({ nullable: true })
+  syncChecksum?: string
+
+  @ManyToOne(
+    () => ThreadEntity,
+    (thread) => thread.childThreads,
+  )
+  @JoinColumn({ name: "parentId" })
+  parentThread?: ThreadEntity
+
+  @OneToMany(
+    () => ThreadEntity,
+    (thread) => thread.parentThread,
+  )
+  childThreads: ThreadEntity[]
+}
+
+@Entity("thread_notifications")
+export class ThreadNotificationEntity {
+  @PrimaryGeneratedColumn("uuid")
+  id: string
+
+  @Column()
+  threadId: string
+
+  @Column()
+  userId: string
+
+  @Column({ default: true })
+  notifyOnReply: boolean
+
+  @Column({ default: true })
+  notifyOnMention: boolean
+
+  @Column({ default: false })
+  notifyOnParticipantJoin: boolean
+
+  @Column({ nullable: true })
+  mutedUntil?: Date
+
+  // Sync-related fields
+  @Column("json", { default: {} })
+  vectorClock: Record<string, number>
+
+  @Column({ nullable: true })
+  lastSyncedAt?: Date
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: Date
 }
