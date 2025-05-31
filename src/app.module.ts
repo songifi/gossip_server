@@ -3,10 +3,12 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ThreadModule } from './threads/thread.module';
+import { TransactionHistoryModule } from './transaction-history/transaction-history.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     ThreadModule,
+    TransactionHistoryModule,
     // XPModule, // XP calculation algorithms
     // AchievementModule, // Achievement tracking system
     // LeaderboardModule, // Leaderboard ranking algorithms
