@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MessagesModule } from './messages/messages.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 import { ThreadModule } from './threads/thread.module';
 
 @Module({
@@ -24,11 +25,12 @@ import { ThreadModule } from './threads/thread.module';
       inject: [ConfigService],
     }),
     MessagesModule,
+    AnalyticsModule,
     ThreadModule,
-    // XPModule, // XP calculation algorithms
-    // AchievementModule, // Achievement tracking system
-    // LeaderboardModule, // Leaderboard ranking algorithms
-    // RewardModule, // Reward distribution mechanisms
+    // XPModule,
+    // AchievementModule,
+    // LeaderboardModule,
+    // RewardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
