@@ -7,6 +7,7 @@ import { Portfolio } from './entities/portfolio.entity';
 import { PortfolioHolding } from './entities/portfolio-holding.entity';
 import { PortfolioBalanceHistory } from './entities/portfolio-balance-history.entity';
 import { CreatePortfolioDto, UpdatePortfolioDto } from './dto/portfolio_dtos';
+import { TransactionType } from './entities/transaction.entity';
 
 @Injectable()
 export class PortfolioService {
