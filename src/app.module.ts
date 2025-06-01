@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { EventModule } from './event.module';
 import { MessagesModule } from './messages/messages.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { ThreadModule } from './threads/thread.module';
@@ -11,6 +12,11 @@ import { SyncModule } from './sync/sync.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    EventModule,
+    // XPModule, // XP calculation algorithms
+    // AchievementModule, // Achievement tracking system
+    // LeaderboardModule, // Leaderboard ranking algorithms
+    // RewardModule, // Reward distribution mechanisms
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
