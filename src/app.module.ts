@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { MessagesModule } from './messages/messages.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { ThreadModule } from './threads/thread.module';
+import { SyncModule } from './sync/sync.module';
 
 @Module({
   imports: [
@@ -27,6 +28,11 @@ import { ThreadModule } from './threads/thread.module';
     MessagesModule,
     AnalyticsModule,
     ThreadModule,
+    SyncModule,
+    // XPModule, // XP calculation algorithms
+    // AchievementModule, // Achievement tracking system
+    // LeaderboardModule, // Leaderboard ranking algorithms
+    // RewardModule, // Reward distribution mechanisms
     // XPModule,
     // AchievementModule,
     // LeaderboardModule,
