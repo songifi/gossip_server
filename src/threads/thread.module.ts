@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ThreadEntity, ThreadNotificationEntity } from './entities/thread.entity';
 import { ThreadService } from './services/thread.service';
 import { ThreadSummaryService } from './services/thread-summary.service';
 import { ThreadNotificationService } from './services/thread-notification.service';
 import { ThreadController } from './controllers/thread.controller';
+import { ThreadEntity, ThreadNotificationEntity } from './entities/thread.entity';
 
 @Module({
   imports: [
