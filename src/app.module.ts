@@ -13,6 +13,7 @@ import { ThreadModule } from './threads/thread.module';
 import { FileModule } from './files/file.module';
 
 import { SyncModule } from './sync/sync.module';
+import { PriceModule } from './price/price.module';
 
 
 @Module({
@@ -50,7 +51,7 @@ import { SyncModule } from './sync/sync.module';
         password: configService.get('DB_PASSWORD', 'postgres'),
         database: configService.get('DB_DATABASE', 'gossip'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get('NODE_ENV') !== 'production',
+        synchronize: configService.get('NODE_ENV') !== 'production', PriceModule,
       }),
       inject: [ConfigService],
     }),

@@ -24,23 +24,19 @@
     "@aws-sdk/cloudfront-signer": "^3.821.0",
     "@aws-sdk/s3-request-presigner": "^3.0.0",
     "@influxdata/influxdb-client": "^1.35.0",
+    "@nestjs/axios": "^4.0.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
-
+    "@nestjs/schedule": "^6.0.0",
     "@nestjs/swagger": "^11.2.0",
-
-    "ical-generator": "^9.0.0",
-    "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1",
-    "uuid": "^11.1.0"
-
     "@nestjs/typeorm": "^11.0.0",
     "@types/crypto-js": "^4.2.2",
     "@types/multer": "^1.4.12",
     "@types/passport-jwt": "^4.0.1",
+    "cache-manager": "^6.4.3",
     "clamscan": "^2.4.0",
     "class-validator": "^0.14.2",
     "crypto-js": "^4.2.0",
@@ -55,18 +51,6 @@
     "typeorm": "^0.3.24",
     "uuid": "^9.0.1"
   },
- "dependencies": {
-  "@influxdata/influxdb-client": "^1.35.0",
-  "@nestjs/common": "^11.0.1",
-  "@nestjs/config": "^4.0.2",
-  "@nestjs/core": "^11.0.1",
-  "@nestjs/platform-express": "^11.0.1",
-  "@nestjs/typeorm": "^11.0.0",
-  "class-validator": "^0.14.2",
-  "reflect-metadata": "^0.2.2",
-  "rxjs": "^7.8.1",
-  "typeorm": "^0.3.24"
-},
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
