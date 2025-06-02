@@ -24,6 +24,18 @@ services:
     depends_on:
       - influxdb
 
+      - postgres
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=gossip_server
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_TOKEN=your-token-here
+      - INFLUXDB_ORG=gossip_server
+      - INFLUXDB_BUCKET=metrics
+
   postgres:
     image: postgres:15-alpine
     ports:
@@ -40,8 +52,20 @@ services:
     ports:
       - "8086:8086"
     volumes:
-      - influxdb_data:/var/lib/influxdb2
+
+      - influxdb-data:/var/lib/influxdb2
+
+  postgres:
+    image: postgres:15
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=gossip_server
+    volumes:      - postgres-data:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
-  influxdb_data:
+  influxdb-data:
+  postgres-data:
+
