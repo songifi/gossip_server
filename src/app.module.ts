@@ -42,6 +42,7 @@ import { PriceModule } from './price/price.module';
     MessagesModule,
     AnalyticsModule,
     ThreadModule,
+    TransactionHistoryModule,
     FileModule,
     SyncModule,
     PriceModule
