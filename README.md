@@ -120,26 +120,3 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-
-```
-gossip_server
-├─ .prettierrc
-├─ docker-compose.yml
-├─ eslint.config.mjs
-├─ nest-cli.json
-├─ package-lock.json
-├─ package.json
-├─ README.md
-├─ src
-│  ├─ app.controller.spec.ts
-│  ├─ app.controller.ts
-│  ├─ app.module.ts
-│  ├─ app.service.ts
-│  └─ main.ts
-├─ test
-│  ├─ app.e2e-spec.ts
-│  └─ jest-e2e.json
-├─ tsconfig.build.json
-└─ tsconfig.json
-
-```
