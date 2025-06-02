@@ -11,10 +11,13 @@ import { AnalyticsModule } from './analytics/analytics.module';
 import { ThreadModule } from './threads/thread.module';
 import { FileModule } from './files/file.module';
 import { SyncModule } from './sync/sync.module';
+import { PriceModule } from './price/price.module';
+
 // import { XPModule } from './xp/xp.module';
 // import { AchievementModule } from './achievement/achievement.module';
 // import { LeaderboardModule } from './leaderboard/leaderboard.module';
-// import { RewardModule } from './reward/reward.module';
+// import { RewardModule } from './reward/reward.module';import { PriceModule } from './price/price.module';
+
 
 @Module({
   imports: [
@@ -30,7 +33,7 @@ import { SyncModule } from './sync/sync.module';
         password: configService.get('DB_PASSWORD', 'postgres'),
         database: configService.get('DB_DATABASE', 'gossip'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get('NODE_ENV') !== 'production',
+        synchronize: configService.get('NODE_ENV') !== 'production', 
       }),
       inject: [ConfigService],
     }),
@@ -41,6 +44,7 @@ import { SyncModule } from './sync/sync.module';
     ThreadModule,
     FileModule,
     SyncModule,
+    PriceModule
 
     // XPModule,
     // AchievementModule,
