@@ -1,3 +1,6 @@
+
+import { User } from '../../users/entities/user.entity';
+
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -16,10 +19,22 @@ export enum MessageStatus {
   READ = 'read',
 }
 
+
 @Entity('messages')
 export class Message {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+
+  @Column('text')
+  content: string;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'userId' })
+  user: User;
+
+  @Column()
+  userId: string;
 
   @Column({ type: 'text', length: 4000 })
   content: string;
@@ -46,13 +61,18 @@ export class Message {
   @OneToMany(() => Message, (message) => message.parentMessage)
   replies: Message[];
 
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
 
+} 
+
+
   @DeleteDateColumn()
   @Exclude()
   deletedAt: Date;
 }
+
