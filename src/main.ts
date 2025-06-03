@@ -1,8 +1,13 @@
-// src/main.ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import * as express from 'express';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ValidationPipe, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,27 +24,66 @@ async function bootstrap() {
   app.use('/upload', express.urlencoded({ extended: true, limit: '50mb' }));
 
   await app.listen(3000);
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+  const logger = new Logger('Bootstrap');
+
+  // Global validation pipe
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
+
+  // Global exception filters
+  app.useGlobalFilters(
+    new AllExceptionsFilter(),
+    new HttpExceptionFilter(),
+  );
+
+  // CORS configuration
+  app.enableCors({
+    origin: configService.get('CORS_ORIGINS')?.split(',') || ['http://localhost:3000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  });
+
+  // API prefix
+  app.setGlobalPrefix('api/v1');
+
+  // Swagger documentation
+  const config = new DocumentBuilder()
+    .setTitle('Group Chat Role Management API')
+    .setDescription('Comprehensive role and permission management system for group chat')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .addTag('Roles', 'Role management endpoints')
+    .addTag('Permissions', 'Permission management endpoints')
+    .addTag('Audit', 'Audit logging endpoints')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
+
+  const port = configService.get('PORT', 3000);
+  await app.listen(port);
+
+  logger.log(`🚀 Application is running on: http://localhost:${port}`);
+  logger.log(`📚 Swagger documentation: http://localhost:${port}/api/docs`);
+}
 }
 bootstrap();
 
-// Example usage on routes (e.g., auth.controller.ts)
-// import { Controller, Post } from '@nestjs/common';
-// import { Throttle } from '@nestjs/throttler';
-//
-// @Controller('auth')
-// export class AuthController {
-//   @Post('login')
-//   @Throttle(5, 60) // 5 requests per minute
-//   login() {
-//     return { message: 'Login endpoint with rate limiting' };
-//   }
-// }
 
-// @Controller('messages')
-// export class MessageController {
-//   @Post('send')
-//   @Throttle(60, 60)
-//   sendMessage() {
-//     return { message: 'Message sent' };
-//   }
-// }

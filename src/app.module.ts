@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+import { Module, CacheModule } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -11,17 +12,26 @@ import { AnalyticsModule } from './analytics/analytics.module';
 import { ThreadModule } from './threads/thread.module';
 import { FileModule } from './files/file.module';
 import { SyncModule } from './sync/sync.module';
-import { PriceModule } from './price/price.module';
 
-// import { XPModule } from './xp/xp.module';
-// import { AchievementModule } from './achievement/achievement.module';
-// import { LeaderboardModule } from './leaderboard/leaderboard.module';
-// import { RewardModule } from './reward/reward.module';import { PriceModule } from './price/price.module';
-
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { RolesModule } from './roles/roles.module';
+import { UsersModule } from './users/users.module';
+import { GroupsModule } from './groups/groups.module';
+import { AuthModule } from './auth/auth.module';
+import { PermissionsGuard } from './roles/guards/permissions.guard';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+
+    EventModule,
+    
+    // XPModule, // XP calculation algorithms
+    // AchievementModule, // Achievement tracking system
+    // LeaderboardModule, // Leaderboard ranking algorithms
+    // RewardModule, // Reward distribution mechanisms
 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -33,7 +43,10 @@ import { PriceModule } from './price/price.module';
         password: configService.get('DB_PASSWORD', 'postgres'),
         database: configService.get('DB_DATABASE', 'gossip'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get('NODE_ENV') !== 'production', 
+        synchronize: configService.get('NODE_ENV') !== 'production',
+        migrations: [__dirname + '/migrations/*{.ts,.js}'],
+        logging: configService.get('NODE_ENV') === 'development',
+
       }),
       inject: [ConfigService],
     }),
@@ -51,8 +64,42 @@ import { PriceModule } from './price/price.module';
     // AchievementModule,
     // LeaderboardModule,
     // RewardModule,
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        isGlobal: true,
+        store: 'redis',
+        host: configService.get('REDIS_HOST'),
+        port: configService.get('REDIS_PORT'),
+        ttl: 300,
+      }),
+      inject: [ConfigService],
+    }),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 100,
+    }),
+    AuthModule,
+    UsersModule,
+    GroupsModule,
+    RolesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionsGuard,
+    },
+  ],
+
 })
 export class AppModule {}
