@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { GroupMember } from '../../group-chat/entities/group-member.entity';
 
 @Entity('users')
 export class User {
@@ -19,4 +26,7 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
-} 
+
+  @OneToMany(() => GroupMember, (member) => member.user)
+  groupMemberships: GroupMember[];
+}
