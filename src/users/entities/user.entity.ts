@@ -1,7 +1,8 @@
 import {
   Entity,
-  Column,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
+  Column,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
@@ -10,17 +11,26 @@ import { GroupMember } from '../../group-chat/entities/group-member.entity';
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryColumn({ type: 'varchar', length: 100, unique: true })
+  walletAddress: string;
 
   @Column()
   username: string;
+
+  @Column()
+  avatar: string;
+
+  @Column({ nullable: true })
+  bio?: string;
 
   @Column()
   email: string;
 
   @Column()
   password: string;
+
+  @Column({ nullable: true })
+  refreshToken?: string;
 
   @CreateDateColumn()
   createdAt: Date;

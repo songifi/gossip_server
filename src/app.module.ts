@@ -16,7 +16,7 @@ import { SyncModule } from './sync/sync.module';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { RolesModule } from './roles/roles.module';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './users/user.module';
 import { GroupsModule } from './groups/groups.module';
 import { AuthModule } from './auth/auth.module';
 import { PermissionsGuard } from './roles/guards/permissions.guard';
