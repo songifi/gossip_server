@@ -1,6 +1,4 @@
-
 import { User } from '../../users/entities/user.entity';
-
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -10,8 +8,9 @@ import {
   ManyToOne,
   OneToMany,
   DeleteDateColumn,
+  JoinColumn,
+  Index
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
 
 export enum MessageStatus {
   SENT = 'sent',
@@ -21,12 +20,12 @@ export enum MessageStatus {
 
 
 @Entity('messages')
+@Index(['content'], { fulltext: true })
 export class Message {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-
-  @Column('text')
+  @Column({ type: 'text', length: 4000 })
   content: string;
 
   @ManyToOne(() => User)
@@ -35,9 +34,6 @@ export class Message {
 
   @Column()
   userId: string;
-
-  @Column({ type: 'text', length: 4000 })
-  content: string;
 
   @Column({ type: 'uuid' })
   senderId: string;
@@ -61,18 +57,13 @@ export class Message {
   @OneToMany(() => Message, (message) => message.parentMessage)
   replies: Message[];
 
-
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
 
-} 
-
-
-  @DeleteDateColumn()
-  @Exclude()
-  deletedAt: Date;
+  @DeleteDateColumn({ nullable: true })
+  deletedAt?: Date;
 }
 
