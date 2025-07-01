@@ -33,6 +33,7 @@
     "@nestjs/schedule": "^6.0.0",
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/typeorm": "^11.0.0",
+    "@types/sanitize-html": "^2.16.0",
     "class-validator": "^0.14.2",
     "ethers": "^6.14.3",
     "rate-limiter-flexible": "^7.1.1",
@@ -40,6 +41,8 @@
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.24",
     "pg": "^8.11.3"
+    "sanitize-html": "^2.17.0",
+    "typeorm": "^0.3.24"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
