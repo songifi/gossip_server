@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, IsNull } from 'typeorm';
 import { Message, MessageStatus } from './entities/message.entity';
 import { CreateMessageDto } from './dto/create-message.dto';
+import { sanitizeMessageContent } from './services/sanitize.util';
 
 @Injectable()
 export class MessagesService {
@@ -15,8 +16,10 @@ export class MessagesService {
     senderId: string,
     createMessageDto: CreateMessageDto,
   ): Promise<Message> {
+    const sanitizedContent = sanitizeMessageContent(createMessageDto.content);
     const message = this.messageRepository.create({
       ...createMessageDto,
+      content: sanitizedContent,
       senderId,
       status: MessageStatus.SENT,
     });
@@ -55,9 +58,9 @@ export class MessagesService {
     const message = await this.messageRepository.findOne({
       where: {
         id,
-        deletedAt: IsNull(),
       },
       relations: ['replies'],
+      withDeleted: false,
     });
 
     if (!message) {
@@ -89,13 +92,14 @@ export class MessagesService {
   async getThread(parentMessageId: string, userId: string): Promise<Message[]> {
     const thread = await this.messageRepository.find({
       where: [
-        { id: parentMessageId, deletedAt: IsNull() },
-        { parentMessageId, deletedAt: IsNull() },
+        { id: parentMessageId },
+        { parentMessageId },
       ],
       relations: ['replies'],
       order: {
         createdAt: 'ASC',
       },
+      withDeleted: false,
     });
 
     if (!thread.length) {
